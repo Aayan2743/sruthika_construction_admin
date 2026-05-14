@@ -1,0 +1,21 @@
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
+export default function RoleProtectedRoute({ children, roles }) {
+  const { user, ready } = useAuth();
+  const location = useLocation();
+
+  if (!ready) {
+    return null;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (!roles.includes(user.role)) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+}
