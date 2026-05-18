@@ -21,12 +21,11 @@ import { getProjects } from "../api/projectApi";
 const defaultColumns = [
   { key: "date", label: "Date", visible: true },
   { key: "party", label: "Party", visible: true },
-  { key: "m", label: "M", visible: true },
-  { key: "f", label: "F", visible: true },
+  { key: "gender", label: "Gender", visible: true },
   { key: "workDone", label: "Work done", visible: true },
   { key: "measurements", label: "Measurements", visible: true },
   { key: "reasonEdit", label: "Reason(Edit)", visible: true },
-  { key: "reasonDelete", label: "Reason(Delete)", visible: true }, 
+  { key: "reasonDelete", label: "Reason(Delete)", visible: true },
 ];
 
 export default function Labour() {
@@ -94,17 +93,20 @@ const fetchReports = async (projectId, filterDate) => {
     const res = await getLabourWorkReport(params);
     const data = res?.data?.data || [];
 
-    const formatted = data.map((item) => ({
-      id: item.work_group_id,
-      date: item.date,
-      party: item.party,
-      m: item.male_count,
-      f: item.female_count,
-      workDone: item.work_done,
-      measurements: item.measurement || "-",
-      reasonEdit: item.edit_reason || "-",
-      reasonDelete: item.delete_reason || "-",
-    }));
+    const formatted = data.map((item) => {
+      const male = Number(item.male_count) || 0;
+      const female = Number(item.female_count) || 0;
+      return {
+        id: item.work_group_id,
+        date: item.date,
+        party: item.party,
+        gender: `M: ${male}  F: ${female}`,
+        workDone: item.work_done,
+        measurements: item.measurement || "-",
+        reasonEdit: item.edit_reason || "-",
+        reasonDelete: item.delete_reason || "-",
+      };
+    });
 
     setRows(formatted);
   } catch (err) {

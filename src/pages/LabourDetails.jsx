@@ -17,12 +17,11 @@ export default function LabourDetails() {
     {
       id: 1,
       originalDate: "2026-05-01",
-      date: "2026-05-03", // Edited date (changed from May 1 to May 3)
+      date: "2026-05-03",
       party: "ABC Construction",
-      m: 30, // Edited (25 se 30)
-      f: 20, // Edited (15 se 20)
+      gender: "M: 30  F: 20",
       workDone: "Foundation digging and leveling completed",
-      measurements: "550 sq.ft", // Edited (500 se 550)
+      measurements: "550 sq.ft",
       reasonEdit: "Worker count increased after site inspection on 02-May-2026",
       editedBy: "Site Manager",
       editedDate: "2026-05-02",
@@ -30,12 +29,11 @@ export default function LabourDetails() {
     {
       id: 2,
       originalDate: "2026-05-01",
-      date: "2026-05-01", // Same date
+      date: "2026-05-01",
       party: "XYZ Builders",
-      m: 30,
-      f: 20,
+      gender: "M: 30  F: 20",
       workDone: "Brick wall construction 1st floor",
-      measurements: "850 bricks", // Edited (800 se 850)
+      measurements: "850 bricks",
       reasonEdit: "Added 5 extra masons as per site visit on 01-May-2026",
       editedBy: "Supervisor",
       editedDate: "2026-05-01",
@@ -43,12 +41,11 @@ export default function LabourDetails() {
     {
       id: 3,
       originalDate: "2026-05-02",
-      date: "2026-05-04", // Edited date
+      date: "2026-05-04",
       party: "ABC Construction",
-      m: 28,
-      f: 18,
+      gender: "M: 28  F: 18",
       workDone: "Cement mixing and pouring for foundation",
-      measurements: "250 bags cement", // Edited (200 se 250)
+      measurements: "250 bags cement",
       reasonEdit: "Measurement updated after quality check on 03-May-2026",
       editedBy: "Quality Inspector",
       editedDate: "2026-05-03",
@@ -56,25 +53,23 @@ export default function LabourDetails() {
     {
       id: 4,
       originalDate: "2026-05-02",
-      date: "2026-05-02", // Same date
+      date: "2026-05-02",
       party: "PQR Infrastructure",
-      m: 20,
-      f: 12,
+      gender: "M: 20  F: 12",
       workDone: "Plumbing work started",
       measurements: "1000 ft pipes",
-      reasonEdit: "-", // No edit
+      reasonEdit: "-",
       editedBy: "-",
       editedDate: "-",
     },
     {
       id: 5,
       originalDate: "2026-05-03",
-      date: "2026-05-05", // Edited date
+      date: "2026-05-05",
       party: "LMN Contractors",
-      m: 40, // Edited (35 se 40)
-      f: 15, // Edited (10 se 15)
+      gender: "M: 40  F: 15",
       workDone: "Roof slab preparation and reinforcement",
-      measurements: "1300 sq.ft", // Edited (1200 se 1300)
+      measurements: "1300 sq.ft",
       reasonEdit: "Additional workers deployed due to deadline on 04-May-2026",
       editedBy: "Project Manager",
       editedDate: "2026-05-04",
@@ -130,7 +125,7 @@ export default function LabourDetails() {
             </h2>
           </div>
 
-        
+         
         </div>
 
          {/* Last edited date info */}
@@ -146,8 +141,7 @@ export default function LabourDetails() {
                 <tr className="bg-secondary/50">
   <th className="py-3 px-4 font-semibold text-foreground text-center border-b border-border border-r border-border whitespace-nowrap">Date</th>
   <th className="py-3 px-4 font-semibold text-foreground text-center border-b border-border border-r border-border whitespace-nowrap">Party</th>
-  <th className="py-3 px-4 font-semibold text-foreground text-center border-b border-border border-r border-border whitespace-nowrap">M</th>
-  <th className="py-3 px-4 font-semibold text-foreground text-center border-b border-border border-r border-border whitespace-nowrap">F</th>
+  <th className="py-3 px-4 font-semibold text-foreground text-center border-b border-border border-r border-border whitespace-nowrap">Gender</th>
   <th className="py-3 px-4 font-semibold text-foreground text-center border-b border-border border-r border-border whitespace-nowrap">Work done</th>
   <th className="py-3 px-4 font-semibold text-foreground text-center border-b border-border border-r border-border whitespace-nowrap">Measurements</th>
   <th className="py-3 px-4 font-semibold text-foreground text-center border-b border-border last:border-r-0 whitespace-nowrap">Reason (Edit)</th>
@@ -187,32 +181,28 @@ export default function LabourDetails() {
                       )}
                     </td>
 
-                    {/* M */}
-                   <td className="py-3 px-4 border-b border-border border-r border-border text-foreground whitespace-nowrap text-center">
+                    {/* Gender (combined M/F) */}
+                    <td className="py-1 px-4 border-b border-border border-r border-border text-foreground whitespace-nowrap text-center">
                       {isEditing ? (
-                        <input
-                          type="number"
-                          value={editData.m || row.m}
-                          onChange={(e) => setEditData({...editData, m: e.target.value})}
-                          className="w-20 h-9 rounded-xl border border-border bg-background px-3 text-center text-foreground outline-none focus:ring-2 focus:ring-primary/30"
-                        />
+                        <div className="flex items-center justify-center gap-1">
+                          <input
+                            type="number"
+                            value={editData.editMale || ""}
+                            onChange={(e) => setEditData({...editData, editMale: e.target.value})}
+                            placeholder="M"
+                            className="w-16 h-9 rounded-xl border border-border bg-background px-2 text-center text-foreground outline-none focus:ring-2 focus:ring-primary/30"
+                          />
+                          <span className="text-muted-foreground">|</span>
+                          <input
+                            type="number"
+                            value={editData.editFemale || ""}
+                            onChange={(e) => setEditData({...editData, editFemale: e.target.value})}
+                            placeholder="F"
+                            className="w-16 h-9 rounded-xl border border-border bg-background px-2 text-center text-foreground outline-none focus:ring-2 focus:ring-primary/30"
+                          />
+                        </div>
                       ) : (
-                        <span>{row.m}</span>
-                      )}
-                    </td>
-
-                    {/* F */}
-                   <td className="py-3 px-4 border-b border-border border-r border-border text-foreground whitespace-nowrap text-center">
-
-                      {isEditing ? (
-                        <input
-                          type="number"
-                          value={editData.f || row.f}
-                          onChange={(e) => setEditData({...editData, f: e.target.value})}
-                          className="w-20 h-9 rounded-xl border border-border bg-background px-3 text-center text-foreground outline-none focus:ring-2 focus:ring-primary/30"
-                        />
-                      ) : (
-                        <span>{row.f}</span>
+                        <span>{row.gender}</span>
                       )}
                     </td>
 
