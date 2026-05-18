@@ -38,9 +38,9 @@ function SlidePanel({ open, onClose, children }) {
 // ─── Labeled Input ───────────────────────────────────────────────────────────
 function LabeledInput({ label, type = "text", value, onChange, placeholder }) {
   return (
-    <div className="relative">
+    <div>
       {label && (
-        <label className="absolute left-4 -top-2.5 bg-card px-1 text-xs text-muted-foreground z-10">
+        <label className="block text-xs font-medium text-muted-foreground mb-1.5">
           {label}
         </label>
       )}
@@ -58,24 +58,150 @@ function LabeledInput({ label, type = "text", value, onChange, placeholder }) {
 // ─── Labeled Select ──────────────────────────────────────────────────────────
 function LabeledSelect({ label, value, onChange, children }) {
   return (
-    <div className="relative">
+    <div>
       {label && (
-        <label className="absolute left-4 -top-2.5 bg-card px-1 text-xs text-muted-foreground z-10">
+        <label className="block text-xs font-medium text-muted-foreground mb-1.5">
           {label}
         </label>
       )}
-      <select
-        value={value}
-        onChange={onChange}
-        className="w-full h-11 rounded-2xl border border-border bg-background px-4 pr-10 text-foreground outline-none appearance-none focus:ring-2 focus:ring-primary/30"
-      >
-        {children}
-      </select>
-      <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+      <div className="relative">
+        <select
+          value={value}
+          onChange={onChange}
+          className="w-full h-11 rounded-2xl border border-border bg-background px-4 pr-10 text-foreground outline-none appearance-none focus:ring-2 focus:ring-primary/30"
+        >
+          {children}
+        </select>
+        <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+      </div>
     </div>
   );
 }
+const FormFields = React.memo(
+  ({
+    form,
+    setForm,
+    managers,
+    loading,
+    handleAddProject,
+    handleUpdateProject,
+    isEdit = false,
+  }) => {
 
+    const ManagerOptions = () => (
+      <>
+        <option value="">Select Manager</option>
+
+        {managers.map((m) => (
+          <option key={m.id} value={m.id}>
+            {m.name ??
+              m.full_name ??
+              m.username ??
+              `User #${m.id}`}
+          </option>
+        ))}
+      </>
+    );
+
+    return (
+      <div className="px-6 space-y-5">
+
+        <LabeledInput
+          label="Project Name"
+          value={form.name}
+          onChange={(e) =>
+            setForm((p) => ({
+              ...p,
+              name: e.target.value,
+            }))
+          }
+          placeholder="Enter project name"
+        />
+
+        <LabeledSelect
+          label="Assign Manager"
+          value={form.manager_id}
+          onChange={(e) =>
+            setForm((p) => ({
+              ...p,
+              manager_id: e.target.value,
+            }))
+          }
+        >
+          <ManagerOptions />
+        </LabeledSelect>
+
+        <LabeledInput
+          label="Location"
+          value={form.location}
+          onChange={(e) =>
+            setForm((p) => ({
+              ...p,
+              location: e.target.value,
+            }))
+          }
+          placeholder="Enter location"
+        />
+
+        <LabeledInput
+          label="Start Date"
+          type="date"
+          value={form.startDate}
+          onChange={(e) =>
+            setForm((p) => ({
+              ...p,
+              startDate: e.target.value,
+            }))
+          }
+        />
+
+        <LabeledInput
+          label="Budget"
+          value={form.budget}
+          onChange={(e) =>
+            setForm((p) => ({
+              ...p,
+              budget: e.target.value,
+            }))
+          }
+          placeholder="e.g. ₹5L"
+        />
+
+        <LabeledSelect
+          label="Status"
+          value={form.status}
+          onChange={(e) =>
+            setForm((p) => ({
+              ...p,
+              status: e.target.value,
+            }))
+          }
+        >
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+          <option value="Pending">Pending</option>
+        </LabeledSelect>
+
+        <button
+          onClick={
+            isEdit
+              ? handleUpdateProject
+              : handleAddProject
+          }
+          disabled={loading}
+          className="w-full h-12 mt-2 rounded-2xl bg-primary text-white font-semibold shadow-md shadow-primary/25 hover:opacity-90 transition disabled:opacity-60"
+        >
+          {loading
+            ? "Saving..."
+            : isEdit
+              ? "Update Project"
+              : "Add Project"}
+        </button>
+
+      </div>
+    );
+  }
+);
 // ─── Main Component ──────────────────────────────────────────────────────────
 const Projects = () => {
   const [projects, setProjects]   = useState([]);
@@ -282,64 +408,7 @@ const paginatedData = useMemo(() => {
   );
 
   // ── Shared Form Fields ──────────────────────────────────────────────────
-  const FormFields = ({ isEdit = false }) => (
-    <div className="px-6 space-y-5">
-      <LabeledInput
-        label="Project Name"
-        value={form.name}
-        onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
-        placeholder="Enter project name"
-      />
-
-      {/* Manager Dropdown */}
-      <LabeledSelect
-        label="Assign Manager"
-        value={form.manager_id}
-        onChange={(e) => setForm((p) => ({ ...p, manager_id: e.target.value }))}
-      >
-        <ManagerOptions />
-      </LabeledSelect>
-
-      <LabeledInput
-        label="Location"
-        value={form.location}
-        onChange={(e) => setForm((p) => ({ ...p, location: e.target.value }))}
-        placeholder="Enter location"
-      />
-
-      <LabeledInput
-        label="Start Date"
-        type="date"
-        value={form.startDate}
-        onChange={(e) => setForm((p) => ({ ...p, startDate: e.target.value }))}
-      />
-
-      <LabeledInput
-        label="Budget"
-        value={form.budget}
-        onChange={(e) => setForm((p) => ({ ...p, budget: e.target.value }))}
-        placeholder="e.g. ₹5L"
-      />
-
-      <LabeledSelect
-        label="Status"
-        value={form.status}
-        onChange={(e) => setForm((p) => ({ ...p, status: e.target.value }))}
-      >
-        <option value="Active">Active</option>
-        <option value="Inactive">Inactive</option>
-        <option value="Pending">Pending</option>
-      </LabeledSelect>
-
-      <button
-        onClick={isEdit ? handleUpdateProject : handleAddProject}
-        disabled={loading}
-        className="w-full h-12 mt-2 rounded-2xl bg-primary text-white font-semibold shadow-md shadow-primary/25 hover:opacity-90 transition disabled:opacity-60"
-      >
-        {loading ? "Saving..." : isEdit ? "Update Project" : "Add Project"}
-      </button>
-    </div>
-  );
+  
 
   // ── Render ──────────────────────────────────────────────────────────────
   return (
@@ -494,7 +563,15 @@ const paginatedData = useMemo(() => {
               <X className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
-          <FormFields isEdit={false} />
+          <FormFields
+  form={form}
+  setForm={setForm}
+  managers={managers}
+  loading={loading}
+  handleAddProject={handleAddProject}
+  handleUpdateProject={handleUpdateProject}
+  isEdit={false}
+/>
         </div>
       </SlidePanel>
 
@@ -507,7 +584,15 @@ const paginatedData = useMemo(() => {
               <X className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
-          <FormFields isEdit={true} />
+          <FormFields
+  form={form}
+  setForm={setForm}
+  managers={managers}
+  loading={loading}
+  handleAddProject={handleAddProject}
+  handleUpdateProject={handleUpdateProject}
+  isEdit={true}
+/>
         </div>
       </SlidePanel>
     </>

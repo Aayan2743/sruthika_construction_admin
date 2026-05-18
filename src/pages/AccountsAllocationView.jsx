@@ -99,7 +99,7 @@ export default function AccountsAllocationView() {
 
         <div className="bg-card rounded-xl border border-border overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm border-collapse min-w-[520px]">
+            <table className="w-full text-sm border-collapse min-w-[700px]">
               <thead>
                 <tr className="bg-secondary/50">
                   <th className="py-3 px-4 font-semibold text-foreground text-left border-b border-border border-r border-border whitespace-nowrap">
@@ -111,6 +111,12 @@ export default function AccountsAllocationView() {
                   <th className="py-3 px-4 font-semibold text-foreground text-left border-b border-border border-r border-border whitespace-nowrap">
                     Type
                   </th>
+                  <th className="py-3 px-4 font-semibold text-foreground text-left border-b border-border border-r border-border whitespace-nowrap">
+                    Vendor Name
+                  </th>
+                  <th className="py-3 px-4 font-semibold text-foreground text-left border-b border-border border-r border-border whitespace-nowrap">
+                    Remarks
+                  </th>
                   <th className="py-3 px-4 font-semibold text-foreground text-right border-b border-border whitespace-nowrap">
                     Amount
                   </th>
@@ -119,25 +125,25 @@ export default function AccountsAllocationView() {
               <tbody>
                 {isLoading ? (
                   <tr>
-                    <td colSpan={4} className="py-12 text-center text-muted-foreground border-b border-border">
+                    <td colSpan={6} className="py-12 text-center text-muted-foreground border-b border-border">
                       Loading...
                     </td>
                   </tr>
                 ) : error ? (
                   <tr>
-                    <td colSpan={4} className="py-12 text-center text-red-500 border-b border-border">
+                    <td colSpan={6} className="py-12 text-center text-red-500 border-b border-border">
                       {error}
                     </td>
                   </tr>
                 ) : !selectedRow ? (
                   <tr>
-                    <td colSpan={4} className="py-12 text-center text-muted-foreground border-b border-border">
+                    <td colSpan={6} className="py-12 text-center text-muted-foreground border-b border-border">
                       No row selected.
                     </td>
                   </tr>
                 ) : rows.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="py-12 text-center text-muted-foreground border-b border-border">
+                    <td colSpan={6} className="py-12 text-center text-muted-foreground border-b border-border">
                       No expense entries for this allocation.
                     </td>
                   </tr>
@@ -158,6 +164,12 @@ export default function AccountsAllocationView() {
                       </td>
                       <td className="py-3 px-4 border-b border-border border-r border-border">
                         {row.type || "-"}
+                      </td>
+                      <td className="py-3 px-4 border-b border-border border-r border-border">
+                        {row.vendor_name || row.vendor || "-"}
+                      </td>
+                      <td className="py-3 px-4 border-b border-border border-r border-border">
+                        {row.remarks || "-"}
                       </td>
                       <td className="py-3 px-4 border-b border-border text-right font-medium text-green-600 tabular-nums">
                         ₹{Number(row.amount).toLocaleString("en-IN")}

@@ -482,29 +482,30 @@ const fetchProjects = async () => {
   placeholder="Name"
   className="w-full h-11 rounded-2xl border border-border bg-background px-4 text-foreground placeholder:text-muted-foreground"
 />
-          <div className="relative">
-            <label className="absolute left-4 -top-2.5 bg-card px-1 text-xs text-muted-foreground">
+          <div>
+            <label className="block text-xs font-medium text-muted-foreground mb-1.5">
               Project
             </label>
-          <select
-  value={formData.project_id}
-  onChange={(e) =>
-    setFormData((prev) => ({
-      ...prev,
-      project_id: e.target.value,
-    }))
-  }
-  className="w-full h-11 rounded-2xl border border-border bg-background px-4 pr-10 text-foreground appearance-none focus:outline-none focus:ring-2 focus:ring-primary/30"
->
-  <option value="">Select project</option>
-
-  {projects.map((project) => (
-    <option key={project.id} value={project.id}>
-      {project.name}
-    </option>
-  ))}
-</select>
-            <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <div className="relative">
+              <select
+                value={formData.project_id}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    project_id: e.target.value,
+                  }))
+                }
+                className="w-full h-11 rounded-2xl border border-border bg-background px-4 pr-10 text-foreground appearance-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+              >
+                <option value="">Select project</option>
+                {projects.map((project) => (
+                  <option key={project.id} value={project.id}>
+                    {project.name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            </div>
           </div>
 
           <input
