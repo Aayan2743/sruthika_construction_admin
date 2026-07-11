@@ -51,7 +51,7 @@ export default function Materials() {
         itemName: item.item_name || "-",
         quantity: item.quantity || "0",
         reasonEdit: item.edit_reason || "-",
-        reasonDelete: "-",
+        reasonDelete: item.delete_reason || "-",
         _changes: item.changes || null,
         _manager: item.manager || null,
       }));

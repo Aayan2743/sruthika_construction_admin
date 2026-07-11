@@ -96,11 +96,11 @@ export default function Machinery() {
         equipment: item.equipment || "-",
         vendor: item.vendor || "-",
         start: item.start_time || "-",
-        close: item.close_time || "-",
+        close: item.end_time || "-",
         total: item.total_hours ? `${item.total_hours} hrs` : "-",
-        workDetails: item.work_details || "-",
+        workDetails: item.work_done || "-",
         reasonEdit: item.edit_histories?.length > 0 ? "View" : "-",
-        reasonDelete: "-",
+        reasonDelete: item.delete_reason || "-",   // <-- change here
         _editHistories: item.edit_histories || [],
       }));
 
