@@ -168,7 +168,7 @@ export default function Profile() {
                   value={form.role}
                   readOnly
                 />
-                <Field
+                {/* <Field
                   label="Old Password"
                   icon={Shield}
                   type="password"
@@ -185,7 +185,7 @@ export default function Profile() {
                   onChange={(value) =>
                     setForm((prev) => ({ ...prev, newPassword: value }))
                   }
-                />
+                /> */}
               </div>
 
               <div className="mt-8 flex justify-end">

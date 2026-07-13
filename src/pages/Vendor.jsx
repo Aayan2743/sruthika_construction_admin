@@ -52,18 +52,34 @@ export default function Vendor() {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      const payload = {
-        name: form.name,
-        contact: form.contact,
-        notes: form.notes,
-        type: form.type,
-      };
       if (editId) {
+        // Editing still updates a single vendor as-is
+        const payload = {
+          name: form.name,
+          contact: form.contact,
+          notes: form.notes,
+          type: form.type,
+        };
         await updateVendorApi(editId, payload);
         alert("Vendor Updated ✅");
       } else {
-        await addVendorApi(payload);
-        alert("Vendor Added ✅");
+        // Adding: create one vendor per selected type
+        if (form.type.length === 0) {
+          alert("Please select at least one type");
+          return;
+        }
+
+        await Promise.all(
+          form.type.map((singleType) =>
+            addVendorApi({
+              name: form.name,
+              contact: form.contact,
+              notes: form.notes,
+              type: [singleType],
+            })
+          )
+        );
+        alert("Vendor(s) Added ✅");
       }
       setShowPanel(false);
       setEditId(null);
@@ -73,7 +89,6 @@ export default function Vendor() {
       console.error("SAVE ERROR ❌", error.response?.data);
     }
   };
-
   const handleDelete = async (id) => {
     try {
       if (!window.confirm("Delete this vendor?")) return;

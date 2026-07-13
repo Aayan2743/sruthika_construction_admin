@@ -83,8 +83,8 @@ export default function Stock() {
           (parseFloat(item.opening_balance || 0) + parseFloat(item.received || 0)).toFixed(2)
         ),
         balance: item.balance || "0",
-        reasonEdit: item.edit_reason || "-",
-        reasonDelete: item.delete_reason || "-",
+        reasonEdit: item.edit_histories?.[0]?.reason || "-",
+        reasonDelete: item.delete_histories?.[0]?.remarks || "-",
         _editHistories: item.edit_histories || [],
         _deleteHistories: item.delete_histories || [],
       }));
@@ -308,7 +308,7 @@ export default function Stock() {
                       <div key={entry.id} className="rounded-xl border border-border bg-background p-4 space-y-2">
                         <div className="flex flex-wrap items-center gap-x-6 gap-y-1 text-sm">
                           <span className="text-muted-foreground">Reason:</span>
-                          <span className="font-medium text-foreground">{entry.reason || "-"}</span>
+                          <span className="font-medium text-foreground">{entry.remarks || "-"}</span>
                         </div>
                         <div className="text-sm">
                           <span className="text-muted-foreground">Deleted At: </span>
