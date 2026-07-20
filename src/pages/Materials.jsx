@@ -43,18 +43,22 @@ export default function Materials() {
       const res = await getMaterialEntryHistory(params);
       const data = res?.data?.data || [];
 
-      const formatted = data.map((item) => ({
-        id: item.id,
-        sno: item.s_no,
-        date: item.date,
-        vendor: item.vendor || "-",
-        itemName: item.item_name || "-",
-        quantity: item.quantity || "0",
-        reasonEdit: item.edit_reason || "-",
-        reasonDelete: item.delete_reason || "-",
-        _changes: item.changes || null,
-        _manager: item.manager || null,
-      }));
+      const formatted = data.map((item) => {
+        const latestEdit = (item.histories && item.histories[0]) || null;
+      
+        return {
+          id: item.id,
+          sno: item.s_no,
+          date: item.date,
+          vendor: item.vendor || "-",
+          itemName: item.item_name || "-",
+          quantity: item.quantity || "0",
+          reasonEdit: latestEdit?.remarks || "-",
+          reasonDelete: item.delete_reason || "-",
+          _changes: latestEdit?.changes || null,
+          _manager: latestEdit?.user || item.manager || null,
+        };
+      });
 
       setRows(formatted);
     } catch (err) {
